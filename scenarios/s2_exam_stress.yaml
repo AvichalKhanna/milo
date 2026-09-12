@@ -1,0 +1,35 @@
+﻿name: s2_exam_stress
+description: >
+  Exam stress: first turn is hold (fresh pain),
+  second turn invites reflection -> explore.
+  Check-in should mention an exam/stress keyword.
+
+setup:
+  person_id: test_s2
+
+turns:
+  - user: "I've been so stressed about my exams, I haven't slept properly in weeks."
+  - user: "Why do I always leave everything to the last minute? I genuinely don't understand myself."
+
+checks:
+  - type: decision
+    turn: 0
+    expected: hold
+
+  - type: decision
+    turn: 1
+    expected: explore
+
+  - type: reply_no_advice
+    turn: 0
+
+  - type: reply_length
+    turn: 0
+    max: 280
+
+  - type: memory_contains
+    field: situations.area_of_life
+    value: academic
+
+  - type: checkin_mentions_keyword
+    keywords: [exam, sleep, stress, procrastinat, last]

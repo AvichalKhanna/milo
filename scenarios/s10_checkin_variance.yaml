@@ -1,0 +1,20 @@
+﻿name: s10_checkin_variance
+description: >
+  ADD-ON 6: Check-In Variance.
+  Evaluates check-in gaps across simulated cycles with fixed seed.
+  Asserts non-constant gaps (variance > 0) and propensity skips.
+
+setup:
+  person_id: test_s10
+
+turns:
+  - user: "I am having a really rough week with burnout at work."
+
+checks:
+  - type: decision
+    turn: 0
+    expected: hold
+
+  - type: checkin_variance_check
+    cycles: 15
+    seed: 42

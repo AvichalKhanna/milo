@@ -1,0 +1,17 @@
+name: s11_name_learned
+description: >
+  User states their name; a later turn should have it available in
+  memory for personalization (checked directly, not via reply text,
+  since greeting personalization only fires on a literal greeting turn).
+
+setup:
+  person_id: test_s11
+
+turns:
+  - user: "hey, call me Avi"
+  - user: "hey"
+
+checks:
+  - type: memory_field_equals
+    field: people.name
+    value: "Avi"

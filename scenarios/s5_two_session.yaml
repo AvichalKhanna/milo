@@ -1,0 +1,33 @@
+﻿name: s5_two_session
+description: >
+  Two-session pickup-the-thread test.
+  First session covers anxiety at work; session summary written;
+  second-session opening turn should have context available.
+
+setup:
+  person_id: test_s5
+  session_boundary: after_turn_1
+
+turns:
+  - user: "I've been struggling with anxiety at work for a while now."
+  - user: "It's been making it really hard to focus on anything during the day."
+  - user: "Hey, I'm back. Still dealing with the same anxiety stuff, honestly."
+
+checks:
+  - type: decision
+    turn: 0
+    expected: hold
+
+  - type: reply_no_advice
+    turn: 0
+
+  - type: reply_length
+    turn: 0
+    max: 280
+
+  - type: session_summary_exists
+    after_turn: 1
+
+  - type: reply_references_prior_context
+    turn: 2
+    keywords: [anxiety, work, focus]

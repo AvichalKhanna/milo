@@ -1,0 +1,16 @@
+name: s_no_second_nudge
+description: >
+  Spec-listed example check: no second nudge before the person has
+  replied to the first. Seeds an open situation, scans for check-ins
+  twice with no reply in between, asserts only one was ever sent.
+
+setup:
+  person_id: test_no_second_nudge
+
+turns:
+  - user: "I've been so anxious about my thesis defense next week, I can't sleep."
+
+checks:
+  - type: no_second_nudge
+    after_advance: "+2d"
+    seed: 7

@@ -1,0 +1,37 @@
+﻿name: s3_family_mention
+description: >
+  Sister/family mention — people persisted to memory;
+  session boundary written; second-session turn loads prior context.
+
+setup:
+  person_id: test_s3
+  session_boundary: after_turn_0
+
+turns:
+  - user: "My sister and I had a huge fight. She said things that really hurt me."
+  - user: "I'm feeling a bit better today, though things with my sister are still tense."
+
+checks:
+  - type: reply_no_advice
+    turn: 0
+
+  - type: reply_length
+    turn: 0
+    max: 280
+
+  - type: memory_person_exists
+    name_contains: sister
+
+  - type: session_summary_exists
+    after_turn: 0
+
+  - type: reply_references_prior_context
+    turn: 1
+    keywords: [sister, fight, tense]
+
+  - type: reply_references_prior_context
+    turn: 1
+    expected_keywords: ["sister"]
+
+  - type: reply_no_verbatim_recite
+    turn: 1

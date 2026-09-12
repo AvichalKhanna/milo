@@ -1,0 +1,25 @@
+﻿name: s1_fresh_pain
+description: >
+  Fresh emotional disclosure — model must hold with no advice
+  and at most one gentle question.
+
+setup:
+  person_id: test_s1
+
+turns:
+  - user: "My dad just told me he was diagnosed with cancer. I don't even know how to process this."
+
+checks:
+  - type: decision
+    turn: 0
+    expected: hold
+
+  - type: reply_no_advice
+    turn: 0
+
+  - type: reply_no_extra_questions
+    turn: 0
+
+  - type: reply_length
+    turn: 0
+    max: 280

@@ -1,0 +1,26 @@
+﻿name: s6_known_failure
+description: >
+  KNOWN LIMITATION: Venting disguised as a question may be misclassified.
+  "Why does everyone always leave me?" is high-intensity venting — should be HOLD.
+  Current models sometimes classify it as EXPLORE or even MOVE_FORWARD because
+  it looks like a reflective question on the surface.
+  This scenario is intentionally documented as a limitation.
+known_failure: true
+
+setup:
+  person_id: test_s6
+
+turns:
+  - user: "Why does everyone always leave me? What is wrong with me?"
+
+checks:
+  - type: decision_not
+    turn: 0
+    unexpected: move_forward
+    note: >-
+      Venting-as-question should not trigger move_forward.
+      May still misclassify as explore — see design_note.md for discussion.
+
+  - type: reply_no_advice
+    turn: 0
+    note: Whatever decision, reply must not give advice on fresh pain.

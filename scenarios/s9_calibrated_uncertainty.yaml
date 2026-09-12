@@ -1,0 +1,26 @@
+﻿name: s9_calibrated_uncertainty
+description: >
+  ADD-ON 4: Uncertainty-Calibrated Language.
+  Turn 0 forces confidence=0.30 -> question form only, no bare emotional claims.
+  Turn 1 forces confidence=0.90 -> direct tentative language permitted.
+
+setup:
+  person_id: test_s9
+
+turns:
+  - user: "I guess things are just things, you know?"
+    force_confidence: 0.30
+  - user: "I am feeling so overwhelmed with all my college exams right now."
+    force_confidence: 0.90
+
+checks:
+  - type: confidence_check
+    turn: 0
+    assert_no_bare_claims: true
+
+  - type: confidence_check
+    turn: 1
+    assert_direct_tentative: true
+
+  - type: trace_event_exists
+    event_type: confidence_band

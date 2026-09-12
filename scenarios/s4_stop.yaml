@@ -1,0 +1,21 @@
+﻿name: s4_stop
+description: >
+  Stop signal — person says stop, paused flag set,
+  no check-in generated even after time advance.
+
+setup:
+  person_id: test_s4
+
+turns:
+  - user: "I'm really overwhelmed with work right now. Everything is piling up."
+  - user: "Actually, stop messaging me please. I need space."
+
+checks:
+  - type: decision
+    turn: 0
+    expected: hold
+
+  - type: person_paused
+
+  - type: no_checkin_generated
+    after_advance: "+3d"

@@ -1,0 +1,46 @@
+name: s_persona_family_conflict
+description: >
+  Persona-driven turns (model plays the user) — a fight with a parent,
+  satisfying the spec's "typed by you, or played by a model from a
+  persona" option, and covering a different life domain than academic
+  stress (family/relationships instead of school).
+
+setup:
+  person_id: test_persona_family
+
+persona_system: >
+  You are someone who just had a really bad argument with your mom on
+  the phone about an hour ago. She said some things that hurt, and you
+  said some things back that you already regret a little. You're not
+  looking for advice on how to fix it — you just need to vent. Text like
+  a real person venting to a friend: short, a little messy, emotional,
+  not formal or eloquent. 1-2 sentences per message.
+
+turns:
+  - persona_turn: true
+  - persona_turn: true
+  - persona_turn: true
+
+checks:
+  - type: decision
+    turn: 0
+    expected: hold
+
+  - type: reply_no_advice
+    turn: 0
+
+  - type: reply_no_extra_questions
+    turn: 0
+
+  - type: reply_no_advice
+    turn: 1
+
+  - type: reply_no_extra_questions
+    turn: 1
+
+  - type: reply_no_extra_questions
+    turn: 2
+
+  - type: latency_check
+    turn: 0
+    min: 2.0

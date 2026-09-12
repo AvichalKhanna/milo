@@ -1,0 +1,22 @@
+﻿name: s8_selective_forgetting
+description: >
+  ADD-ON 3: Selective Forgetting.
+  Situation untouched for 6 sim-days flips to 'stale'.
+  Subsequent reply surfaces it as a check-in question rather than assuming it is still true.
+
+setup:
+  person_id: test_s8
+
+turns:
+  - user: "I've been preparing for a really big interview this week and I'm very anxious."
+  - user: "Hey, good to catch up again."
+    advance_days: 6
+
+checks:
+  - type: stale_status_check
+
+  - type: stale_question_check
+    turn: 1
+
+  - type: trace_event_exists
+    event_type: stale_flip

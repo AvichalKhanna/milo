@@ -1,0 +1,32 @@
+﻿name: s7_latency_affect
+description: >
+  ADD-ON 1: Latency as Affect.
+  Fresh pain / hold turn yields delay > 2.0s.
+  Move forward turn yields delay < 1.5s.
+
+setup:
+  person_id: test_s7
+
+turns:
+  - user: "I just got diagnosed with an autoimmune disease and I feel completely lost."
+  - user: "What should I do first to get organized with my medical appointments?"
+
+checks:
+  - type: decision
+    turn: 0
+    expected: hold
+
+  - type: latency_check
+    turn: 0
+    min: 2.0
+
+  - type: decision
+    turn: 1
+    expected: move_forward
+
+  - type: latency_check
+    turn: 1
+    max: 1.5
+
+  - type: trace_event_exists
+    event_type: latency_computed

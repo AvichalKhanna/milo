@@ -12,6 +12,8 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import importlib
+import subprocess
 import sys
 import os
 import threading
@@ -26,6 +28,75 @@ if sys.platform == "win32":
         pass
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+
+# ── Dependency check: verify required packages, install if missing ──────────
+def _ensure_dependencies() -> None:
+    """Check for required third-party packages. Attempt to install any that
+    are missing via pip. If installation still fails after attempting,
+    alert the user clearly and exit — rather than crashing later with a
+    confusing ImportError buried deep in a stack trace."""
+    # (import_name, pip_install_name) — these can differ (e.g. python-dotenv -> dotenv)
+    required = [
+        ("dotenv", "python-dotenv"),
+        ("openai", "openai"),
+        ("yaml", "pyyaml"),
+    ]
+
+    missing: list[str] = []
+    for import_name, pip_name in required:
+        try:
+            importlib.import_module(import_name)
+        except ImportError:
+            missing.append(pip_name)
+
+    if not missing:
+        return
+
+    print(f"Missing required package(s): {', '.join(missing)}")
+    print("Attempting to install automatically...\n")
+
+    for pip_name in missing:
+        try:
+            subprocess.check_call(
+                [sys.executable, "-m", "pip", "install", pip_name],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+            print(f"  Installed {pip_name}")
+        except subprocess.CalledProcessError:
+            print(
+                f"\nERROR: Could not automatically install '{pip_name}'.\n"
+                f"Please install it manually and try again:\n\n"
+                f"    pip install {pip_name}\n\n"
+                f"Or install everything at once:\n\n"
+                f"    pip install -r requirements.txt\n"
+            )
+            sys.exit(1)
+
+    # Re-verify after install attempts, in case something silently failed
+    still_missing = []
+    for import_name, pip_name in required:
+        try:
+            importlib.import_module(import_name)
+        except ImportError:
+            still_missing.append(pip_name)
+
+    if still_missing:
+        print(
+            f"\nERROR: The following package(s) are still missing after "
+            f"installation attempts: {', '.join(still_missing)}\n\n"
+            f"Please install manually:\n\n"
+            f"    pip install {' '.join(still_missing)}\n\n"
+            f"Or:\n\n"
+            f"    pip install -r requirements.txt\n"
+        )
+        sys.exit(1)
+
+    print()  # blank line before banner for a clean startup
+
+
+_ensure_dependencies()
 
 from agent.memory import init_db, load_context, close_session, list_known_people
 from agent.pipeline import process_turn
